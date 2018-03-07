@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "personal")
-//@Proxy(lazy = false)
+@Proxy(lazy = false)
 public class Personal {
     private Integer personal_id;
     private String name;

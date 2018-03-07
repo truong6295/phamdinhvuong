@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "projectrole")
-//@Proxy(lazy = false)
+@Proxy(lazy = false)
 public class ProjectRole {
     private Integer projectrole_id;
     private String qualifications;

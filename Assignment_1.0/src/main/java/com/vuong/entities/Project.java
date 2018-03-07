@@ -1,9 +1,12 @@
 package com.vuong.entities;
 
+import org.hibernate.annotations.Proxy;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Proxy(lazy = false)
 public class Project {
     private Integer project_id;
     private String name;
