@@ -33,10 +33,10 @@ public class ProjectService {
     }
 
     //Them project
-    public boolean addProject(int idPersonal, int idRepo, String name, Date deadline){
+    public boolean addProject(int idPersonal, int idRole, String name, Date deadline){
         try {
             Personal personal = personalRepo.getOne(idPersonal);
-            ProjectRole projectRole = projectRoleRepo.getOne(idRepo);
+            ProjectRole projectRole = projectRoleRepo.getOne(idRole);
             Project project = new Project(name, deadline, personal, projectRole);
             projectRepo.save(project);
             return true;
@@ -47,13 +47,13 @@ public class ProjectService {
     }
 
     //Sua project theo id
-    public boolean updateProject(int idProject, int idPersonal, int idRepo, String name, Date deadline){
+    public boolean updateProject(int idProject, int idPersonal, int idRole, String name, Date deadline){
         try {
-            Project project = projectRepo.getOne(idPersonal);
+            Project project = projectRepo.getOne(idProject);
             project.setName(name);
             project.setDeadline(deadline);
             project.setPersonal(personalRepo.getOne(idPersonal));
-            project.setProjectRole(projectRoleRepo.getOne(idRepo));
+            project.setProjectRole(projectRoleRepo.getOne(idRole));
             projectRepo.save(project);
             return true;
         }

@@ -3,11 +3,8 @@ package com.vuong.rest;
 import com.vuong.entities.Project;
 import com.vuong.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.Date;
 import java.util.List;
 
@@ -17,42 +14,45 @@ public class ProjectREST {
     ProjectService projectService;
 
     //Tim tat ca project
-    @GetMapping("/project/showall")
+    @GetMapping(value = "project/showall")
     @ResponseBody
-    public List<Project> findAllProject(){
+     public List<Project> findAllProject(){
         return projectService.findAllProject();
     }
 
     //Tim project theo id
-    @GetMapping("/project/{id}")
+    @GetMapping("project/find")
     @ResponseBody
-    public Project findProjectById(@PathVariable("id") int id){
+    public Project findProjectById(@RequestParam("id") int id){
         return projectService.findProjectById(id);
     }
 
     //Them project
     @PostMapping("project/add")
     @ResponseBody
-    public boolean addProject(String name, long ldOB, int idPersonal, int idRepo){
-        Date dOB = new Date(ldOB);
-        projectService.addProject(idPersonal, idRepo, name, dOB);
-        return true;
+    public Project addProject(@RequestParam("idPersonal") int idPersonal, @RequestParam("idRole") int idRole, String name,
+                              Date deadLine){
+        if (projectService.addProject(idPersonal, idRole, name, deadLine)){
+            return projectService.findProjectById(findAllProject().size());
+        }
+        return null;
     }
 
     //Sua project
-    @PutMapping("project/update/{id}")
+    @PutMapping("project/update")
     @ResponseBody
-    public boolean updateProject(@PathVariable("id") int id, String name, long ldOB, int idPersonal, int idRepo){
-        Date dOB = new Date(ldOB);
-        projectService.updateProject(id, idPersonal, idRepo, name, dOB);
-        return true;
+    public Project updateProject(@RequestParam("id") int id, @RequestParam("idPersonal") int idPersonal,
+                                 @RequestParam("idRole") int idRole, String name, Date deadLine){
+        if (projectService.updateProject(id, idPersonal, idRole, name, deadLine)){
+            return projectService.findProjectById(id);
+        }
+        return null;
     }
 
     //Delete project
-    @DeleteMapping("project/delete/{id}")
+    @DeleteMapping("project/delete")
     @ResponseBody
-    public boolean deleteProject(@PathVariable("id") int id){
-        projectService.deleteProject(id);
-        return true;
+    public boolean deleteProject(@RequestParam("id") int id){
+        return projectService.deleteProject(id);
     }
 }

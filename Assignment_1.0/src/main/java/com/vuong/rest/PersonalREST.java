@@ -2,9 +2,8 @@ package com.vuong.rest;
 
 import com.vuong.entities.Personal;
 import com.vuong.service.PersonalService;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,18 +12,17 @@ import java.util.List;
 public class PersonalREST {
     @Autowired
     PersonalService personalService;
-
     //tim tat ca personal
-    @GetMapping("/personal/showall")
+    @GetMapping("personal/showall")
     @ResponseBody
     public List<Personal> findAllPersonal(){
         return personalService.findAllPersonal();
     }
 
     //tim personal theo id
-    @GetMapping("/personal/{id}")
+    @GetMapping("personal/find")
     @ResponseBody
-    public Personal findPersonalById(@PathVariable("id") int id){
+    public Personal findPersonalById(@RequestParam("id") int id){
         return personalService.findPersonalById(id);
     }
 
@@ -32,23 +30,26 @@ public class PersonalREST {
     @PostMapping("personal/add")
     @ResponseBody
     public Personal addPersonal(Personal personal){
-        personalService.addPersonal(personal);
-        return personal;
+        if (personalService.addPersonal(personal)){
+            return personal;
+        }
+        return null;
     }
 
     //sua personal
-    @PutMapping("personal/update/{id}")
+    @PutMapping("personal/update")
     @ResponseBody
-    public Personal updatePersonal(@PathVariable("id") int id, Personal personal){
-        personalService.updatePersonal(id, personal);
-        return personalService.findPersonalById(id);
+    public Personal updatePersonal(@RequestParam("id") int id, Personal personal){
+        if (personalService.updatePersonal(id, personal)){
+            return personalService.findPersonalById(id);
+        }
+        return null;
     }
 
     //delete personal
-    @DeleteMapping("personal/delete/{id}")
+    @DeleteMapping("personal/delete")
     @ResponseBody
-    public ResponseEntity<?> deletePersonal(@PathVariable("id") int id){
-        personalService.deletePersonal(id);
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    public boolean deletePersonal(@RequestParam("id") int id){
+        return personalService.deletePersonal(id);
     }
 }
